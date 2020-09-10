@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-  <title>getpost</title>
+  <title>Contact Us</title>
 </head>
 
 <body>
   <!--h1>Hello, world!</h1-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Coder's</a>
+    <a class="navbar-brand" href="#">Get/Post</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -43,7 +43,7 @@
           </div>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="get_post.php">Contact</a>
+          <a class="nav-link" href="form.php">Contact</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -62,27 +62,58 @@
     $city   = $_POST['city'];
     $state  = $_POST['state'];
 
-    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>Success!</strong> Your name, '.$name.'  email '.$email.' and other details has been submitted successfully!
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>';
-  }
+    // Connecting to the database
+    $server="localhost";
+    $uname="root";
+    $pass="";
+    $db="contact";
+
+    // Create connection
+    $con= mysqli_connect($server,$uname,$pass,$db);
+
+    // Die if connection was not successful
+    if(!$con){
+        die("Sorry we failed to connect: ".mysqli_connect_error());
+    }
+    else{
+       // echo "Connection was Successfull";
+
+        // Submit these to a database
+        $sql="INSERT INTO `contact_us` (`name`, `email`, `phone`, `city`, `state`, `date`) 
+        VALUES ('$name', '$email', '$contact', '$city', '$state', current_timestamp());";
+
+        $result= mysqli_query($con,$sql);
+        // execute query
+        if($result){
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> Your name, '.$name.' and other details has been submitted successfully!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        }
+        else{
+            echo "The record was not inserted successfully because of this error ---> ". mysqli_error($con);
+        }
+    }
+    
+    $con->close();
+    }
 ?>
 
   <div class="container my-3">
         <h1>Please Enter your Details</h1>
 
-        <form action="get_post.php"method="post">
+        <form action="form.php"method="post">
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" name="name" class="form-control" id="name" placeholder="Name" />
           </div>
           <div class="form-group">
             <label for="email">Email address</label>
-            <input type="email" name="email" class="form-control" id="email" placeholder="Email" />
-          </div>
+            <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
           <div class="form-group">
             <label for="contact">Contact No.</label>
             <input type="text" name="contact" class="form-control" id="conatct" placeholder="+91" />
@@ -98,27 +129,13 @@
          
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+
   </div>
 
 
 
 
-  <!-- FOOTER -->
-  <!--footer class="container">
-        <p class="float-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2020-2021 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer-->
-
- 
-
-  <!--footer class="container">
-        <div class="float-right my-2">
-          <a href="#">Back to top</a>
-        </div>
-        <div class="float-left my-2">2020-2021 Company, Inc. &middot; <a href="#">Privacy</a> by <a href="https://github.com/Dashminder-Singh">@Dashminder</a>
-        </div> 
-      </footer-->
-
+  
 
 
   <!-- Optional JavaScript -->
